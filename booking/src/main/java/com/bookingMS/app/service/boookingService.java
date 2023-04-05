@@ -40,6 +40,7 @@ public class boookingService {
 	}
 	
 	public booking Book(@RequestBody booking req) {
+		System.out.println("booking started");
 		businventory businv = invfeign.getBusInventory(req.getBusNumber());
 				if (businv != null) {
 			if (businv.getAvailableseats() >= req.getNoOfSeats()) {
