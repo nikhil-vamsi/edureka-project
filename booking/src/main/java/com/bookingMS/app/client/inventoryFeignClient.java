@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.bookingMS.app.model.businventory;
 
-@FeignClient(name="inventoryMS",url="http://localhost:8081")
+@FeignClient(name="application-inventory")
 public interface inventoryFeignClient {
 	@GetMapping("/getByBus/{id}")
 	businventory getBusInventory(@PathVariable int id);
