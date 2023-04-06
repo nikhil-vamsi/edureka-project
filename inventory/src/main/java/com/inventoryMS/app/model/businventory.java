@@ -9,15 +9,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "businventory")
-public class businventory {
+public class Businventory {
 
 	@Id
     private int busnumber;
 
     private int availableseats;
 
+    @JsonFormat(pattern="yyyy-mm-dd")
     private Date lastupdateddate;
 
 	public int getBusnumber() {
@@ -44,12 +47,12 @@ public class businventory {
 		this.lastupdateddate = lastupdateddate;
 	}
 
-	public businventory() {
+	public Businventory() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public businventory(int busnumber, int availableseats, Date lastupdateddate) {
+	public Businventory(int busnumber, int availableseats, Date lastupdateddate) {
 		super();
 		this.busnumber = busnumber;
 		this.availableseats = availableseats;

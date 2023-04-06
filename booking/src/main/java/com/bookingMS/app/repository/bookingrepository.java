@@ -2,13 +2,13 @@ package com.bookingMS.app.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.bookingMS.app.model.booking;
+import com.bookingMS.app.model.Booking;
 
 import java.util.List;
 
-public interface bookingrepository extends JpaRepository<booking, Integer> {
+public interface Bookingrepository extends JpaRepository<Booking, Integer> {
 
-	booking findByBookingnumber(int id);
+	Booking findByBookingnumber(int id);
 
 
 }

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inventoryMS.app.model.businventory;
-import com.inventoryMS.app.service.businventoryservice;
+import com.inventoryMS.app.model.Businventory;
+import com.inventoryMS.app.service.Businventoryservice;
 
 
 @RestController
@@ -22,20 +22,20 @@ public class BusInventoryController {
 
 
 	@Autowired
-	private businventoryservice busInvService;
+	private Businventoryservice busInvService;
 	
 	@GetMapping("/getBusInv")
-	public List<businventory> getAll(){
+	public List<Businventory> getAll(){
 		return busInvService.getAll();
 	}
 	
 	
 	@PostMapping("/busInv")
-	public businventory create(@RequestBody businventory req) {
+	public Businventory create(@RequestBody Businventory req) {
 		return busInvService.create(req);
 	}
 	@PutMapping("/updBusInv/{id}")
-	public businventory update(@RequestBody businventory req,@PathVariable int id) {
+	public Businventory update(@RequestBody Businventory req,@PathVariable int id) {
 		return busInvService.update(req, id);
 	}
 	@DeleteMapping("/delBusInv/{id}")
@@ -45,7 +45,7 @@ public class BusInventoryController {
 	}
 	
 	@GetMapping("/getByBus/{id}")
-	public businventory getByBusNum(@PathVariable int id) {
+	public Businventory getByBusNum(@PathVariable int id) {
 		return busInvService.getByBusNum(id);
 		 
 	}

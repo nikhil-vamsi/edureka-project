@@ -9,9 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "payment")
-public class payment {
+public class Payment {
     @Id
     @Column(name = "paymentid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +23,20 @@ public class payment {
     
     @Column(name = "bookingnumber")
     private int bookingnumber;
-
+    
+   
     @Column(name = "dateofpayment")
+    @JsonFormat(pattern="yyyy-mm-dd")
     private Date dateofpayment;
 
-	public payment(int paymentid, int bookingnumber, Date dateofpayment) {
+	public Payment(int paymentid, int bookingnumber, Date dateofpayment) {
 		super();
 		this.paymentid = paymentid;
 		this.bookingnumber = bookingnumber;
 		this.dateofpayment = dateofpayment;
 	}
 
-	public payment() {
+	public Payment() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -52,6 +58,7 @@ public class payment {
 	}
 
 	public Date getdateofpayment() {
+		
 		return dateofpayment;
 	}
 

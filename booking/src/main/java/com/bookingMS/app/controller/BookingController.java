@@ -1,6 +1,7 @@
 
 package com.bookingMS.app.controller;
 
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.bookingMS.app.model.Passenger;
-import com.bookingMS.app.model.booking;
-import com.bookingMS.app.repository.passengerRepository;
+import com.bookingMS.app.model.Booking;
+import com.bookingMS.app.repository.PassengerRepository;
 import com.bookingMS.app.service.boookingService;
 
 @RestController
@@ -28,21 +29,21 @@ public class BookingController {
 	private boookingService bookService;
 	
 	@Autowired
-	private passengerRepository passengerRepo;
+	private PassengerRepository passengerRepo;
 	
 	@GetMapping("/getBookings")
-	public List<booking> getAll() {
+	public List<Booking> getAll() {
 		return bookService.getAll();
 	}
 	
 	@GetMapping("/getBookingById/{Id}")
-	public booking getById(@PathVariable int id) {
+	public Booking getById(@PathVariable int id) {
 		return bookService.getById(id);
 	}
 
 
 	@PostMapping("/Book")
-	public booking Book(@RequestBody booking req) {
+	public String Book(@RequestBody Booking req){
 		return bookService.Book(req);
 
 	}

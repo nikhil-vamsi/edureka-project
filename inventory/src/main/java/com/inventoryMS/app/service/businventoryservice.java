@@ -7,33 +7,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.inventoryMS.app.model.businventory;
+import com.inventoryMS.app.model.Businventory;
 import com.inventoryMS.app.repository.BusInventoryRepository;
 
 @Service
-public class businventoryservice {
+public class Businventoryservice {
 	
 	@Autowired
 	private BusInventoryRepository busInvRepo;
 	
-	public List<businventory> getAll(){
+	public List<Businventory> getAll(){
 		return busInvRepo.findAll();
 	}
-	public businventory update( businventory req, int id) {
-		businventory busInv = busInvRepo.findByBusnumber(id);
+	public Businventory update( Businventory req, int id) {
+		Businventory busInv = busInvRepo.findByBusnumber(id);
 		busInv.setAvailableseats(req.getAvailableseats());
 		busInv.setLastupdateddate(req.getLastupdateddate());
 		return busInvRepo.save(busInv);
 	}
 	
-	public businventory create( businventory req) {
+	public Businventory create( Businventory req) {
 		return busInvRepo.save(req);
 	}
 	public String delete( int id) {
 		 busInvRepo.deleteByBusnumber(id);
 		 return "deleted";
 	}
-	public businventory getByBusNum( int id) {
+	public Businventory getByBusNum( int id) {
 		 return busInvRepo.findByBusnumber(id);
 		 
 	}

@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="busroute")
-public class busroute {
+public class Busroute {
     
     @Id
     private int busnum;
@@ -45,7 +45,7 @@ public class busroute {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-	public busroute(int busNum, String sourceName, String destinationName, int price) {
+	public Busroute(int busNum, String sourceName, String destinationName, int price) {
 		super();
 		this.busnum = busNum;
 		this.sourcename = sourceName;
@@ -55,7 +55,7 @@ public class busroute {
 	public float getPrice() {
 		return price;
 	}
-	public busroute() {
+	public Busroute() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

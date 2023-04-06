@@ -6,7 +6,7 @@ import com.bookingMS.app.model.Passenger;
 
 import java.util.List;
 
-public interface passengerRepository extends JpaRepository<Passenger,Integer> {
+public interface PassengerRepository extends JpaRepository<Passenger,Integer> {
 
 
 }

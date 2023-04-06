@@ -14,32 +14,32 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paymentMS.app.Repository.paymentRepository;
-import com.paymentMS.app.model.payment;
-import com.paymentMS.app.service.paymentService;
+import com.paymentMS.app.Repository.PaymentRepository;
+import com.paymentMS.app.model.Payment;
+import com.paymentMS.app.service.PaymentService;
 
 @RestController
-public class paymentController {
+public class PaymentController {
 
 	@Autowired
-	private paymentRepository paymentRepo;
+	private PaymentRepository paymentRepo;
 	
 	@Autowired
-	private paymentService payService;
+	private PaymentService payService;
 
 	@GetMapping("/getpayment")
-	public List<payment> getAll() {
+	public List<Payment> getAll() {
 		return payService.getPayments();
 	}
 
 	@PostMapping("/pay")
-	public payment doPayment(@RequestBody payment req) {
+	public Payment doPayment(@RequestBody Payment req) {
 
 		return payService.savePayment(req);
 	}
 	
 	@PutMapping("/updPay/{id}")
-	public payment update(@RequestBody payment req,@PathVariable int id) {
+	public Payment update(@RequestBody Payment req,@PathVariable int id) {
 		return payService.updatePayment(req, id);
 	}
 	

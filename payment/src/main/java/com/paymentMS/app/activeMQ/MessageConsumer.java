@@ -13,9 +13,9 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-import com.paymentMS.app.controller.paymentController;
-import com.paymentMS.app.model.payment;
-import com.paymentMS.app.service.paymentService;
+import com.paymentMS.app.controller.PaymentController;
+import com.paymentMS.app.model.Payment;
+import com.paymentMS.app.service.PaymentService;
 
 @Component
 @EnableJms
@@ -23,27 +23,41 @@ public class MessageConsumer {
 
 
 	@Autowired 
-	paymentController pay;
+	PaymentController pay;
 	
 	@Autowired
 	private JmsTemplate jmsTemplate;
 	
 	@Autowired
 	private Queue queue;
+	
+	@Autowired
+	private Queue errorqueue;
 
 	
 	@Autowired
-	private paymentService payService;
+	private PaymentService payService;
 	
 	
     @JmsListener(destination = "paymentQueue")
     public void listener(String message){
+    	try {
     	List<String> list = Arrays.asList(message.split("/"));
-    	payment p = new payment();
+    	Payment p = new Payment();
     	p.setbookingnumber(Integer.parseInt(list.get(0)));
     	Date currentDate = new Date();
     	p.setdateofpayment(currentDate);
-    	payService.savePayment(p);
-    	jmsTemplate.convertAndSend(queue, message);
+    	if(true) {
+        	throw new NullPointerException();
+        	}
+    	Payment paymentSaved = payService.savePayment(p);
+    	String newMessage = message.concat("/").concat(String.valueOf(paymentSaved.getpaymentid()));
+    	jmsTemplate.convertAndSend(queue, newMessage);
     }
+    	catch(Exception exc) {
+    		List<String> list = Arrays.asList(message.split("/"));
+    		String errorMessage = "1".concat("/").concat(list.get(0));
+    		jmsTemplate.convertAndSend(errorqueue, errorMessage);
+    	}
+    	}
 }

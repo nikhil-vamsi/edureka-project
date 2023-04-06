@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adminMS.app.model.busroute;
+import com.adminMS.app.model.Busroute;
 import com.adminMS.app.repository.BusRouteRepository;
 
 @RestController
@@ -25,18 +25,18 @@ public class BusRouteController {
 	private BusRouteRepository busRouteRepo;
 
 	@GetMapping("/getBusRoute")
-	public List<busroute> getAll() {
+	public List<Busroute> getAll() {
 		return busRouteRepo.findAll();
 	}
 
 	@PostMapping("/busRoute")
-	public busroute Book(@RequestBody busroute req) {
+	public Busroute Book(@RequestBody Busroute req) {
 
 		return busRouteRepo.save(req);
 	}
 	@PutMapping("/updBusRoute/{id}")
-	public busroute Book(@RequestBody busroute req,@PathVariable int id) {
-		busroute busRou = busRouteRepo.findByBusnum(id);
+	public Busroute Book(@RequestBody Busroute req,@PathVariable int id) {
+		Busroute busRou = busRouteRepo.findByBusnum(id);
 		busRou.setDestinationname(req.getDestinationname());
 		busRou.setPrice(req.getPrice());
 		busRou.setSourcename(req.getSourcename());

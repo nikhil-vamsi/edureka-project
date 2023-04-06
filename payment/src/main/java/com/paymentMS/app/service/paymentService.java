@@ -7,26 +7,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.paymentMS.app.Repository.paymentRepository;
-import com.paymentMS.app.model.payment;
+import com.paymentMS.app.Repository.PaymentRepository;
+import com.paymentMS.app.model.Payment;
 
 @Service
-public class paymentService {
+public class PaymentService {
 	
 	@Autowired
-	private paymentRepository paymentRepo;
+	private PaymentRepository paymentRepo;
 	
-	public payment savePayment(payment req) {
+	public Payment savePayment(Payment req) {
 
 		return paymentRepo.save(req);
 	}
 	
-	public List<payment> getPayments() {
+	public List<Payment> getPayments() {
 		return paymentRepo.findAll();
 	}
 	
-	public payment updatePayment( payment req,int id) {
-		payment p = paymentRepo.findByPaymentid( id);
+	public Payment updatePayment( Payment req,int id) {
+		Payment p = paymentRepo.findByPaymentid( id);
 		p.setbookingnumber(req.getbookingnumber());
 		p.setdateofpayment(req.getdateofpayment());
 		return paymentRepo.save(req);

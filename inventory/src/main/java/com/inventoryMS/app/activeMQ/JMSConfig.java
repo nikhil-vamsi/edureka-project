@@ -13,5 +13,10 @@ public class JMSConfig {
 	    public ActiveMQQueue queue(){
 	        return new ActiveMQQueue("bookingQueue");
 	    }
+	    
+	    @Bean
+	    public ActiveMQQueue errorqueue(){
+	        return new ActiveMQQueue("errorQueue");
+	    }
 	}
 

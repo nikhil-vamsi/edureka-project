@@ -1,8 +1,12 @@
 package com.bookingMS.app.service;
 
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.jms.Queue;
+import javax.management.relation.RelationTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,16 +16,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.bookingMS.app.client.inventoryFeignClient;
-import com.bookingMS.app.model.booking;
-import com.bookingMS.app.model.businventory;
-import com.bookingMS.app.repository.bookingrepository;
+import com.bookingMS.app.client.InventoryFeignClient;
+import com.bookingMS.app.model.Booking;
+import com.bookingMS.app.model.Businventory;
+import com.bookingMS.app.repository.Bookingrepository;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class boookingService {
 
 	@Autowired
-	private bookingrepository bookRepo;
+	private Bookingrepository bookRepo;
 
 	@Autowired
 	private Queue queue;
@@ -30,36 +36,41 @@ public class boookingService {
 	private Queue errorQueue;
 
 	@Autowired
-	private inventoryFeignClient invfeign;
+	private InventoryFeignClient invfeign;
 
 	@Autowired
 	private JmsTemplate jmsTemplate;
 	
-	public List<booking> getAll() {
+	public List<Booking> getAll() {
 		return bookRepo.findAll();
 	}
 	
-	public booking Book(@RequestBody booking req) {
-		System.out.println("booking started");
-		businventory businv = invfeign.getBusInventory(req.getBusNumber());
-				if (businv != null) {
-			if (businv.getAvailableseats() >= req.getNoOfSeats()) {
-				req.setBookingStatus("pending");
-				booking book = bookRepo.save(req);
-				String message = String.valueOf(book.getBookingNumber()).concat("/")
-						.concat(String.valueOf(book.getNoOfSeats()).concat("/")
-						.concat(String.valueOf(book.getBusNumber())));
+	public String invfeignfail(Booking req,Throwable th){
+		
+		return "Booking failed due to  ms availability";
+	}
+	@CircuitBreaker(name="invfeigns",fallbackMethod="invfeignfail")
+	public String Book(@RequestBody Booking req){
+		Businventory businv = invfeign.getBusInventory(req.getBusnumber());
+		if (businv != null) {
+			if (businv.getAvailableseats() >= req.getNoofseats()) {
+				req.setBookingstatus("pending");
+				Booking book = bookRepo.save(req);
+				String message = String.valueOf(book.getBookingnumber()).concat("/")
+						.concat(String.valueOf(book.getNoofseats()).concat("/")
+						.concat(String.valueOf(book.getBusnumber())));
 				jmsTemplate.convertAndSend(queue, message);
-				return book;
+				Booking book2 = bookRepo.findByBookingnumber(book.getBookingnumber());
+				return "booking completed";
 			} else {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "no seats available");
+				return "seats not available";
 			}
 		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "no bus available");
+			return "bus not available";
 		}
 
 	}
-	public booking getById(int id) {
+	public Booking getById(int id) {
 		return bookRepo.findByBookingnumber(id);
 	}
 }

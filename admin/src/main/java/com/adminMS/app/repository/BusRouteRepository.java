@@ -5,14 +5,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import com.adminMS.app.model.busroute;
+import com.adminMS.app.model.Busroute;
 
 import java.util.List;
 
 @Repository
-public interface BusRouteRepository extends JpaRepository<busroute, Integer> {
+public interface BusRouteRepository extends JpaRepository<Busroute, Integer> {
 
-	busroute findByBusnum(int id);
+	Busroute findByBusnum(int id);
 
 	void deleteByBusnum(int id);
 	

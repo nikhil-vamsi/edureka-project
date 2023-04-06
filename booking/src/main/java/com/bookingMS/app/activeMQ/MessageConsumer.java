@@ -13,10 +13,11 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
+import com.bookingMS.app.client.PaymentFeignClient;
 import com.bookingMS.app.model.Passenger;
-import com.bookingMS.app.model.booking;
-import com.bookingMS.app.repository.bookingrepository;
-import com.bookingMS.app.repository.passengerRepository;
+import com.bookingMS.app.model.Booking;
+import com.bookingMS.app.repository.Bookingrepository;
+import com.bookingMS.app.repository.PassengerRepository;
 import com.bookingMS.app.service.boookingService;
 
 @Component
@@ -27,10 +28,12 @@ public class MessageConsumer {
 	private JmsTemplate jmsTemplate;
 	
 	@Autowired
-	private bookingrepository bookRepo;
+	private Bookingrepository bookRepo;
 	
+	@Autowired 
+	private PaymentFeignClient paymentFeign;
 	@Autowired
-	private passengerRepository passengerRepo;
+	private PassengerRepository passengerRepo;
 	
 	@Autowired
 	private boookingService bookService;
@@ -43,8 +46,8 @@ public class MessageConsumer {
     @JmsListener(destination = "bookingQueue")
     public void listener(String message){
     	List<String> list = Arrays.asList(message.split("/"));
-    	booking book = bookService.getById(Integer.parseInt(list.get(0)));
-    	book.setBookingStatus("confirmed");
+    	Booking book = bookService.getById(Integer.parseInt(list.get(0)));
+    	book.setBookingstatus("confirmed");
     	bookRepo.save(book);
     	for(int i=0;i<Integer.parseInt(list.get(1));i++) {
     		Passenger p = new Passenger();
@@ -56,8 +59,15 @@ public class MessageConsumer {
     @JmsListener(destination = "errorQueue")
     public void listener2(String message){
     	List<String> list = Arrays.asList(message.split("/"));
-    	booking book = bookService.getById(Integer.parseInt(list.get(0)));
-    	book.setBookingStatus("failed");
-    	bookRepo.save(book);
+    	if(Integer.parseInt(list.get(0))==1) {
+    		/*payment failed */
+    		bookRepo.deleteById(Integer.parseInt(list.get(1)));
+    	}
+    	
+    	if(Integer.parseInt(list.get(0))==2) {
+    		/*inventory failed */
+    		paymentFeign.delete(Integer.parseInt(list.get(1)));
+    		bookRepo.deleteById(Integer.parseInt(list.get(2)));
+    	}
     }
 }
